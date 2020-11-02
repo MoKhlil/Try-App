@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
           width: 150,
           height:50,
       child: new RaisedButton(
-          textColor: Colors.lime,
+          textColor: Colors.blue,
           child: new Text("Logun"),
         color: Colors.black,
         splashColor: Colors.lime[100],
