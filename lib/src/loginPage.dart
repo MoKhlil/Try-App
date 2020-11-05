@@ -77,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
           height:50,
       child: new RaisedButton(
           textColor: Colors.lime,
-          child: new Text("Logun"),
+          child: new Text("login"),
         color: Colors.black,
         splashColor: Colors.lime[100],
         animationDuration: Duration(seconds: 60),
@@ -172,7 +172,6 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
         body: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
               boxShadow: <BoxShadow>[
                 BoxShadow(
                     color: Colors.grey.shade200,
@@ -191,7 +190,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Stack(
             children: <Widget>[
               Positioned(
-                  top: -height * .15,
+                  top: -height * .10,
                   right: -MediaQuery.of(context).size.width * .5,
                   child: BezierContainer()),
               Container(
