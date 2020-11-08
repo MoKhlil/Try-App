@@ -41,7 +41,6 @@ class _LoginPageState extends State<LoginPage> {
     FocusNode myFocusNode = new FocusNode();
     return
           TextFormField(
-
             cursorColor: Colors.lime,
             obscureText: isPassword,
             style: TextStyle(color: Colors.white),
