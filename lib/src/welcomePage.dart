@@ -17,52 +17,47 @@ class WelcomePage extends StatefulWidget  {
 }
 
 class _WelcomePageState extends State<WelcomePage>  {
-
-  Widget _submitButton() {
-    return Container(
-      width: 250,
-              child: new RaisedButton(
-
-                  textColor: Colors.lime,
-                  child: new Text("login"),
-                  color: Colors.black,
-                  splashColor: Colors.lime[100],
-                  animationDuration: Duration(seconds: 60),
-                  padding: EdgeInsets.all(5.0),
-                onPressed: ()  {
-                     Navigator.push(
-                         context,
-                         MaterialPageRoute(builder: (context) => LoginPage()));
-                   },
-    shape: RoundedRectangleBorder(
-    borderRadius: new BorderRadius.circular(18.0),
-    side: BorderSide(color: Colors.white),
-    )
-              ),
-      );
-  }
-
   Widget _signUpButton() {
       return
         Container(
           width: 250,
             child: new RaisedButton(
               textColor: Colors.lime,
-              child: new Text("Register"),
+              child: new Text("Serch..."),
               color: Colors.black,
               splashColor: Colors.lime[100],
               animationDuration: Duration(seconds: 60),
               padding: EdgeInsets.all(5.0),
-              onPressed: ()  {
-                Navigator.push(
-            context, MaterialPageRoute(builder: (context) => SignUpPage()));
-              },
+              onPressed: ()  {},
                 shape: RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(18.0),
                   side: BorderSide(color: Colors.white),
                 )
             ),
         );
+  }
+
+  Widget _backButton() {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => LoginPage()));
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: Row(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.only(left: 0, top: 10, bottom: 10),
+              child: Icon(Icons.keyboard_arrow_left, color: Colors.white),
+            ),
+            Text('Back',
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500))
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _title() {
@@ -85,7 +80,6 @@ class _WelcomePageState extends State<WelcomePage>  {
           ]),
     );
   }
-
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -123,18 +117,20 @@ class _WelcomePageState extends State<WelcomePage>  {
               children: <Widget>[
                 SizedBox(height: height * .2),
                 _title(),
-                SizedBox(height: 50),
-                _submitButton(),
-                SizedBox(height: 20),
+
+
+                SizedBox(height: 150),
                 _signUpButton(),
                 SizedBox(height: height * .055),
               ],
             ),
     ),
     ),
+              Positioned(top: 40, left: 0, child: _backButton()),
             ]
     ),
     ),
+
     );
 
   }

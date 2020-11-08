@@ -1,11 +1,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_login_signup/src/signup.dart';
+import 'package:flutter_login_signup/src/welcomePage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Conect/APICon.dart';
 import 'Widget/bezierContainer.dart';
-
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);
@@ -13,34 +13,19 @@ class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
-
 class _LoginPageState extends State<LoginPage> {
-
-  Widget _backButton() {
-    return InkWell(
-      onTap: () {
-        Navigator.pop(context);
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: Row(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(left: 0, top: 10, bottom: 10),
-              child: Icon(Icons.keyboard_arrow_left, color: Colors.white),
-            ),
-            Text('Back',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500))
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _entryField(String title, {bool isPassword = false}) {
+  final _formKey = GlobalKey<FormState>();
+  final PasswordController = TextEditingController();
+  final EmailController = TextEditingController();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  var Email="S";
+  var passowrd;
+  Widget _EmailField(String title, {bool isPassword = false}) {
     FocusNode myFocusNode = new FocusNode();
     return
           TextFormField(
+            controller: EmailController,
+
             cursorColor: Colors.lime,
             obscureText: isPassword,
             style: TextStyle(color: Colors.white),
@@ -70,7 +55,41 @@ class _LoginPageState extends State<LoginPage> {
             ),
           );
   }
+  Widget _PasswordField(String title, {bool isPassword = false}) {
+    FocusNode myFocusNode = new FocusNode();
+    return
+      TextFormField(
+        controller: PasswordController,
 
+        cursorColor: Colors.lime,
+        obscureText: isPassword,
+        style: TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          fillColor: Colors.white12,
+          filled: true,
+          labelText: title,
+          labelStyle: TextStyle(
+              color: myFocusNode.hasFocus ? Colors.white : Colors.white
+          ),
+          //hintText: title,
+          //hintStyle: TextStyle(fontSize: 15.0, color: Colors.white),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.white,
+            ),
+          ),
+
+          enabledBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            borderSide: BorderSide(color: Colors.white12),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            borderSide: BorderSide(color: Colors.lime),
+          ),
+        ),
+      );
+  }
   Widget _submitButton() {
     return Container(
           width: 150,
@@ -84,15 +103,19 @@ class _LoginPageState extends State<LoginPage> {
           padding: EdgeInsets.all(5.0),
 
         onPressed: () async {
-          SharedPreferences localStorage = await SharedPreferences.getInstance();
-          Network().fetchAlbum("json");
-          var sien=   localStorage.getString('Test');
-          if(sien !="")
-          {
-            Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginPage()));
-          };
+         // SharedPreferences localStorage = await SharedPreferences.getInstance();
+         // Network().fetchAlbum("json");
+         // var sien=   localStorage.getString('Test');
+
+    print(EmailController.text);
+    print(PasswordController.text);
+
+         // if(sien !="")
+         // {
+         //   Navigator.push(
+         //       context,
+         //       MaterialPageRoute(builder: (context) => WelcomePage()));
+         // };
         },
           shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(18.0),
@@ -103,38 +126,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _createAccountLabel() {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => SignUpPage()));
-      },
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 20),
-        padding: EdgeInsets.all(15),
-        alignment: Alignment.bottomCenter,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Don\'t have an account ?',
-              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600,color: Colors.white),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text(
-              'Register',
-              style: TextStyle(
-                  color: Color(0xffffd600),
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+
 
   Widget _title() {
     return RichText(
@@ -157,12 +149,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _emailPasswordWidget() {
+  Widget _emailWidget() {
     return Column(
       children: <Widget>[
-        _entryField("Email id"),
-        SizedBox(height: 20),
-        _entryField("Password", isPassword: true),
+        _EmailField("Email id", isPassword: false),
+        SizedBox(height: 10),
+        _PasswordField("Passowrd", isPassword: true),
       ],
     );
   }
@@ -170,7 +162,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+
     return Scaffold(
+        key: _scaffoldKey,
         body: Container(
           decoration: BoxDecoration(
               boxShadow: <BoxShadow>[
@@ -188,6 +182,7 @@ class _LoginPageState extends State<LoginPage> {
     )
      ),
           height: height,
+
           child: Stack(
             children: <Widget>[
               Positioned(
@@ -195,8 +190,9 @@ class _LoginPageState extends State<LoginPage> {
                   right: -MediaQuery.of(context).size.width * .5,
                   child: BezierContainer()),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Form(
+                  key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -204,19 +200,21 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(height: height * .2),
                       _title(),
                       SizedBox(height: 50),
-                      _emailPasswordWidget(),
+                      _emailWidget(),
                       SizedBox(height: 20),
                       _submitButton(),
-                      SizedBox(height: height * .055),
-                      _createAccountLabel(),
+                     
                     ],
                   ),
+
                 ),
               ),
-              Positioned(top: 20, left: 0, child: _backButton()),
+
             ],
           ),
         )
     );
   }
 }
+
+

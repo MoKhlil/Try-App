@@ -16,7 +16,9 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _backButton() {
     return InkWell(
       onTap: () {
-        Navigator.pop(context);
+        Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => LoginPage()));
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
@@ -150,9 +152,9 @@ class _SignUpPageState extends State<SignUpPage> {
     return Column(
       children: <Widget>[
         _entryField("Username"),
-        SizedBox(height: 20),
+        SizedBox(height: 10),
         _entryField("Password", isPassword: true),
-        SizedBox(height: 20),
+        SizedBox(height: 10),
         _entryField("ConfermPassword", isPassword: true),
       ],
     );
@@ -188,7 +190,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: BezierContainer()),
             Container(
               width: MediaQuery.of(context).size.width,
-             // padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 10),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
