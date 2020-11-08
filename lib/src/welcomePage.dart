@@ -60,26 +60,6 @@ class _WelcomePageState extends State<WelcomePage>  {
     );
   }
 
-  Widget _title() {
-    return RichText(
-      textAlign: TextAlign.center,
-      text: TextSpan(
-          text: 'T',
-          style: GoogleFonts.portLligatSans(
-            textStyle: Theme.of(context).textTheme.display1,
-            fontSize: 30,
-            fontWeight: FontWeight.w700,
-            color: Color(0xffffd600),
-          ),
-          children: [
-            TextSpan(
-              text: 'ry',
-              style: TextStyle(color: Colors.white, fontSize: 30),
-            ),
-
-          ]),
-    );
-  }
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -116,9 +96,7 @@ class _WelcomePageState extends State<WelcomePage>  {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(height: height * .2),
-                _title(),
-
-
+                BezierContainer().title(),
                 SizedBox(height: 150),
                 _signUpButton(),
                 SizedBox(height: height * .055),

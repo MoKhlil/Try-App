@@ -20,81 +20,32 @@ class _LoginPageState extends State<LoginPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _PAssvalidate = false;
   bool _Mailvalidate = false;
-  Widget _PasswordField(String title,TextEditingController control,String Error,bool ErrorVa, {bool isPassword = false}) {
-    FocusNode myFocusNode = new FocusNode();
-    return
-      TextFormField(
-        controller: control,
-        cursorColor: Colors.lime,
-        obscureText: isPassword,
-        style: TextStyle(color: Colors.white),
-        decoration: InputDecoration(
-          fillColor: Colors.white12,
-          filled: true,
-          errorText: ErrorVa ? Error : null,
-
-          labelText: title,
-          labelStyle: TextStyle(
-              color: myFocusNode.hasFocus ? Colors.white : Colors.white
-          ),
-
-          //hintText: title,
-          //hintStyle: TextStyle(fontSize: 15.0, color: Colors.white),
-          border: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.white,
-            ),
-          ),
-
-          enabledBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            borderSide: BorderSide(color: Colors.white12),
-          ),
-          focusedBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            borderSide: BorderSide(color: Colors.lime),
-          ),
-        ),
-      );
-  }
 
   Widget _submitButton() {
     return Container(
           width: 150,
           height:50,
       child: new RaisedButton(
-          textColor: Colors.lime,
-          child: new Text("login"),
+
+          child: new Text("login",style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Colors.lime)),
         color: Colors.black,
-        splashColor: Colors.lime[100],
+        splashColor: Colors.lime,
         animationDuration: Duration(seconds: 60),
           padding: EdgeInsets.all(5.0),
 
         onPressed: () async {
-          _Mailvalidate = false;
-          _PAssvalidate = false;
-            if(EmailController.text.isEmpty)
+          setState(() {
+          EmailController.text.isEmpty ? _Mailvalidate = true : _Mailvalidate = false;
+          PasswordController.text.isEmpty ? _PAssvalidate = true : _PAssvalidate = false;
+          });
+            if(EmailController.text.isEmpty||PasswordController.text.isEmpty)
               {
-
-                setState(() {
-                  EmailController.text.isEmpty ? _Mailvalidate = true : _Mailvalidate = false;
-                });
                 return ;
               }
 
-            if(PasswordController.text.isEmpty)
-            {
-              setState(() {
-
-                PasswordController.text.isEmpty ? _PAssvalidate = true : _PAssvalidate = false;
-              });
-              return ;
-            }
          SharedPreferences localStorage = await SharedPreferences.getInstance();
          Network().fetchAlbum("json");
          var sien=   localStorage.getString('Test');
-
-
          if(sien !="")
          {
            Navigator.push(
@@ -111,33 +62,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _title() {
-    return RichText(
-      textAlign: TextAlign.center,
-      text: TextSpan(
-          text: 'T',
-          style: GoogleFonts.portLligatSans(
-            textStyle: Theme.of(context).textTheme.display1,
-            fontSize: 30,
-            fontWeight: FontWeight.w700,
-            color: Color(0xffffd600),
-          ),
-          children: [
-            TextSpan(
-              text: 'ry',
-              style: TextStyle(color: Colors.white, fontSize: 30),
-            ),
-
-          ]),
-    );
-  }
-
   Widget _emailWidget() {
     return Column(
       children: <Widget>[
-        _PasswordField("ID",EmailController,"ID Value Can\'t Be Empty",_Mailvalidate,isPassword: false),
+        BezierContainer().DesignTextFild("ID",EmailController,"ID Value Can\'t Be Empty",_Mailvalidate,isPassword: false),
         SizedBox(height: 10),
-        _PasswordField("Passowrd",PasswordController,"Passowrd Value Can\'t Be Empty",_PAssvalidate, isPassword: true),
+        BezierContainer().DesignTextFild("Passowrd",PasswordController,"Passowrd Value Can\'t Be Empty",_PAssvalidate, isPassword: true),
       ],
     );
   }
@@ -156,17 +86,14 @@ class _LoginPageState extends State<LoginPage> {
           children: <Widget>[
             Text(
               'Don\'t have an account ?',
-              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600,color: Colors.white),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Colors.white)
             ),
             SizedBox(
               width: 5,
             ),
             Text(
               'Register',
-              style: TextStyle(
-                  color: Colors.lime,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600),
+             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Colors.lime),
             ),
           ],
         ),
@@ -178,7 +105,6 @@ class _LoginPageState extends State<LoginPage> {
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
         //resizeToAvoidBottomInset: false, // set it to false
-
         key: _scaffoldKey,
         body: Container(
           decoration: BoxDecoration(
@@ -211,11 +137,12 @@ class _LoginPageState extends State<LoginPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      _title(),
+                      BezierContainer().title(),
                       SizedBox(height: 20),
                       _emailWidget(),
                       SizedBox(height: 20),
                       _submitButton(),
+                      SizedBox(height: height * .030),
                       _createAccountLabel(),
 
                     ],
@@ -229,5 +156,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
+
+
 
 

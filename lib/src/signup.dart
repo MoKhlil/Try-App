@@ -13,6 +13,15 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final PasswordController = TextEditingController();
+  final EmailController = TextEditingController();
+  final ConPassController= TextEditingController();
+
+  bool _PAssvalidate = false;
+  bool _Mailvalidate = false;
+  bool _ConPassvalidate = false;
   Widget _backButton() {
     return InkWell(
       onTap: () {
@@ -36,54 +45,28 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget _entryField(String title, {bool isPassword = false}) {
-    FocusNode myFocusNode = new FocusNode();
-    return
-      TextFormField(
-        cursorColor: Colors.lime,
-        obscureText: isPassword,
-        style: TextStyle(color: Colors.white),
-        decoration: InputDecoration(
-          fillColor: Colors.white12,
-          filled: true,
-          labelText: title,
-          labelStyle: TextStyle(
-              color: myFocusNode.hasFocus ? Colors.white : Colors.white
-          ),
-          //hintText: title,
-          //hintStyle: TextStyle(fontSize: 15.0, color: Colors.white),
-          border: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.white,
-            ),
-          ),
-
-          enabledBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            borderSide: BorderSide(color: Colors.white12),
-          ),
-          focusedBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            borderSide: BorderSide(color: Colors.lime),
-          ),
-        ),
-      );
-  }
-
   Widget _submitButton() {
     return Container(
       width: 150,
       height:50,
       child: new RaisedButton(
-          textColor: Colors.lime,
-          child: new Text("Register Now"),
+
+          child: new Text("Register Now",style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Colors.lime)),
           color: Colors.black,
-          splashColor: Colors.lime[100],
+          splashColor: Colors.lime,
           animationDuration: Duration(seconds: 60),
           padding: EdgeInsets.all(5.0),
 
           onPressed: ()   {
-
+            setState(() {
+              EmailController.text.isEmpty ? _Mailvalidate = true  : _Mailvalidate = false;
+              PasswordController.text.isEmpty ? _PAssvalidate = true : _PAssvalidate = false;
+              ConPassController.text.isEmpty ? _ConPassvalidate = true : _ConPassvalidate = false;
+            });
+              if(EmailController.text.isEmpty||PasswordController.text.isEmpty||ConPassController.text.isEmpty)
+              {
+                return ;
+              }
           },
           shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(18.0),
@@ -108,18 +91,13 @@ class _SignUpPageState extends State<SignUpPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Already have an account ?',
-              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600,color: Colors.white),
+              'Already have an account ?',style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Colors.white)
             ),
             SizedBox(
               width: 10,
             ),
             Text(
-              'Login',
-              style: TextStyle(
-                  color: Colors.lime,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600),
+              'Login',style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Colors.lime),
             ),
           ],
         ),
@@ -127,35 +105,17 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget _title() {
-    return RichText(
-      textAlign: TextAlign.center,
-      text: TextSpan(
-          text: 'T',
-          style: GoogleFonts.portLligatSans(
-            textStyle: Theme.of(context).textTheme.display1,
-            fontSize: 30,
-            fontWeight: FontWeight.w700,
-            color: Color(0xffffd600),
-          ),
-          children: [
-            TextSpan(
-              text: 'ry',
-              style: TextStyle(color: Colors.white, fontSize: 30),
-            ),
-
-          ]),
-    );
-  }
-
   Widget _emailPasswordWidget() {
     return Column(
       children: <Widget>[
-        _entryField("Username"),
+        BezierContainer().DesignTextFild("Username",EmailController,"Username Value Can\'t Be Empty",_Mailvalidate,isPassword: false),
+
         SizedBox(height: 10),
-        _entryField("Password", isPassword: true),
+        BezierContainer().DesignTextFild("Password",PasswordController,"Password Value Can\'t Be Empty",_PAssvalidate,isPassword: true),
+
         SizedBox(height: 10),
-        _entryField("ConfermPassword", isPassword: true),
+        BezierContainer().DesignTextFild("ConfermPassword",ConPassController,"ConfermPassword Value Can\'t Be Empty",_ConPassvalidate,isPassword: true),
+
       ],
     );
   }
@@ -164,6 +124,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
+      key: _scaffoldKey,
       body: Container(
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
@@ -191,18 +152,19 @@ class _SignUpPageState extends State<SignUpPage> {
             Container(
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.symmetric(horizontal: 10),
-              child: SingleChildScrollView(
+              child: Form(
+                key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(height: height * .2),
-                    _title(),
-                    SizedBox(height: 50),
+                    //SizedBox(height: height * .2),
+                    BezierContainer().title(),
+                    SizedBox(height: 20),
                     _emailPasswordWidget(),
                     SizedBox(height: 20),
                     _submitButton(),
-                    SizedBox(height: height * .055),
+                    SizedBox(height: height * .030),
                     _loginAccountLabel(),
                   ],
                 ),

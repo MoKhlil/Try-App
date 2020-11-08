@@ -1,12 +1,70 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'customClipper.dart';
 
 class BezierContainer extends StatelessWidget {
   const BezierContainer({Key key}) : super(key: key);
 
+  Widget DesignTextFild(String title,TextEditingController control,String Error,bool ErrorVa, {bool isPassword = false}) {
+    FocusNode myFocusNode = new FocusNode();
+    return
+      TextFormField(
+        controller: control,
+        cursorColor: Colors.lime,
+        obscureText: isPassword,
+        style: TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          fillColor: Colors.white12,
+          filled: true,
+          errorText: ErrorVa ? Error : null,
+
+          labelText: title,
+          labelStyle: TextStyle(
+              color: myFocusNode.hasFocus ? Colors.white : Colors.white
+          ),
+
+          //hintText: title,
+          //hintStyle: TextStyle(fontSize: 15.0, color: Colors.white),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.white,
+            ),
+          ),
+
+          enabledBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            borderSide: BorderSide(color: Colors.white12),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            borderSide: BorderSide(color: Colors.lime),
+          ),
+        ),
+      );
+  }
+
+  Widget title() {
+    return RichText(
+      textAlign: TextAlign.center,
+      text: TextSpan(
+          text: 'T',
+          style: GoogleFonts.portLligatSans(
+            fontSize: 40,
+            fontWeight: FontWeight.w700,
+            color: Color(0xffffd600),
+          ),
+          children: [
+            TextSpan(
+              text: 'ry',
+              style: TextStyle(color: Colors.white, fontSize: 30),
+            ),
+
+          ]),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -29,4 +87,6 @@ class BezierContainer extends StatelessWidget {
       )
     );
   }
+
+
 }
