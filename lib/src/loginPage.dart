@@ -38,37 +38,38 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _entryField(String title, {bool isPassword = false}) {
-    return Container(
-
-      margin: EdgeInsets.symmetric(vertical: 5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(
-            height: 1,
-          ),
+    FocusNode myFocusNode = new FocusNode();
+    return
           TextFormField(
+
             cursorColor: Colors.lime,
             obscureText: isPassword,
             style: TextStyle(color: Colors.white),
             decoration: InputDecoration(
-              hintText: title,
-              hintStyle: TextStyle(fontSize: 17 ,color: Colors.white),
-              border: InputBorder.none,
+              fillColor: Colors.white12,
               filled: true,
-              enabledBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                borderSide: BorderSide(color: Colors.white),
+              labelText: title,
+              labelStyle: TextStyle(
+                  color: myFocusNode.hasFocus ? Colors.white : Colors.white
               ),
-              focusedBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                borderSide: BorderSide(color: Colors.white),
+             //hintText: title,
+             //hintStyle: TextStyle(fontSize: 15.0, color: Colors.white),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.white,
+                ),
               ),
+
+           enabledBorder: const OutlineInputBorder(
+             borderRadius: BorderRadius.all(Radius.circular(10.0)),
+             borderSide: BorderSide(color: Colors.white12),
+           ),
+           focusedBorder: const OutlineInputBorder(
+             borderRadius: BorderRadius.all(Radius.circular(10.0)),
+             borderSide: BorderSide(color: Colors.lime),
+           ),
             ),
-          ),
-        ],
-      ),
-    );
+          );
   }
 
   Widget _submitButton() {
@@ -161,6 +162,7 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       children: <Widget>[
         _entryField("Email id"),
+        SizedBox(height: 20),
         _entryField("Password", isPassword: true),
       ],
     );
