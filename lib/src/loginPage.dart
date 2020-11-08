@@ -18,59 +18,26 @@ class _LoginPageState extends State<LoginPage> {
   final PasswordController = TextEditingController();
   final EmailController = TextEditingController();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  var Email="S";
-  var passowrd;
-  Widget _EmailField(String title, {bool isPassword = false}) {
-    FocusNode myFocusNode = new FocusNode();
-    return
-          TextFormField(
-            controller: EmailController,
-
-            cursorColor: Colors.lime,
-            obscureText: isPassword,
-            style: TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              fillColor: Colors.white12,
-              filled: true,
-              labelText: title,
-              labelStyle: TextStyle(
-                  color: myFocusNode.hasFocus ? Colors.white : Colors.white
-              ),
-             //hintText: title,
-             //hintStyle: TextStyle(fontSize: 15.0, color: Colors.white),
-              border: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.white,
-                ),
-              ),
-
-           enabledBorder: const OutlineInputBorder(
-             borderRadius: BorderRadius.all(Radius.circular(10.0)),
-             borderSide: BorderSide(color: Colors.white12),
-           ),
-           focusedBorder: const OutlineInputBorder(
-             borderRadius: BorderRadius.all(Radius.circular(10.0)),
-             borderSide: BorderSide(color: Colors.lime),
-           ),
-            ),
-          );
-  }
-  Widget _PasswordField(String title, {bool isPassword = false}) {
+  bool _PAssvalidate = false;
+  bool _Mailvalidate = false;
+  Widget _PasswordField(String title,TextEditingController control,String Error,bool ErrorVa, {bool isPassword = false}) {
     FocusNode myFocusNode = new FocusNode();
     return
       TextFormField(
-        controller: PasswordController,
-
+        controller: control,
         cursorColor: Colors.lime,
         obscureText: isPassword,
         style: TextStyle(color: Colors.white),
         decoration: InputDecoration(
           fillColor: Colors.white12,
           filled: true,
+          errorText: ErrorVa ? Error : null,
+
           labelText: title,
           labelStyle: TextStyle(
               color: myFocusNode.hasFocus ? Colors.white : Colors.white
           ),
+
           //hintText: title,
           //hintStyle: TextStyle(fontSize: 15.0, color: Colors.white),
           border: OutlineInputBorder(
@@ -90,6 +57,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
   }
+
   Widget _submitButton() {
     return Container(
           width: 150,
@@ -103,19 +71,36 @@ class _LoginPageState extends State<LoginPage> {
           padding: EdgeInsets.all(5.0),
 
         onPressed: () async {
-         // SharedPreferences localStorage = await SharedPreferences.getInstance();
-         // Network().fetchAlbum("json");
-         // var sien=   localStorage.getString('Test');
+          _Mailvalidate = false;
+          _PAssvalidate = false;
+            if(EmailController.text.isEmpty)
+              {
 
-    print(EmailController.text);
-    print(PasswordController.text);
+                setState(() {
+                  EmailController.text.isEmpty ? _Mailvalidate = true : _Mailvalidate = false;
+                });
+                return ;
+              }
 
-         // if(sien !="")
-         // {
-         //   Navigator.push(
-         //       context,
-         //       MaterialPageRoute(builder: (context) => WelcomePage()));
-         // };
+            if(PasswordController.text.isEmpty)
+            {
+              setState(() {
+
+                PasswordController.text.isEmpty ? _PAssvalidate = true : _PAssvalidate = false;
+              });
+              return ;
+            }
+         SharedPreferences localStorage = await SharedPreferences.getInstance();
+         Network().fetchAlbum("json");
+         var sien=   localStorage.getString('Test');
+
+
+         if(sien !="")
+         {
+           Navigator.push(
+               context,
+               MaterialPageRoute(builder: (context) => WelcomePage()));
+         };
         },
           shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(18.0),
@@ -125,8 +110,6 @@ class _LoginPageState extends State<LoginPage> {
 
     );
   }
-
-
 
   Widget _title() {
     return RichText(
@@ -152,18 +135,50 @@ class _LoginPageState extends State<LoginPage> {
   Widget _emailWidget() {
     return Column(
       children: <Widget>[
-        _EmailField("Email id", isPassword: false),
+        _PasswordField("ID",EmailController,"ID Value Can\'t Be Empty",_Mailvalidate,isPassword: false),
         SizedBox(height: 10),
-        _PasswordField("Passowrd", isPassword: true),
+        _PasswordField("Passowrd",PasswordController,"Passowrd Value Can\'t Be Empty",_PAssvalidate, isPassword: true),
       ],
     );
   }
-
+  Widget _createAccountLabel() {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => SignUpPage()));
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 20),
+        padding: EdgeInsets.all(15),
+        alignment: Alignment.bottomCenter,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Don\'t have an account ?',
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600,color: Colors.white),
+            ),
+            SizedBox(
+              width: 5,
+            ),
+            Text(
+              'Register',
+              style: TextStyle(
+                  color: Colors.lime,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-
     return Scaffold(
+        //resizeToAvoidBottomInset: false, // set it to false
+
         key: _scaffoldKey,
         body: Container(
           decoration: BoxDecoration(
@@ -182,7 +197,6 @@ class _LoginPageState extends State<LoginPage> {
     )
      ),
           height: height,
-
           child: Stack(
             children: <Widget>[
               Positioned(
@@ -197,16 +211,15 @@ class _LoginPageState extends State<LoginPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      SizedBox(height: height * .2),
                       _title(),
-                      SizedBox(height: 50),
+                      SizedBox(height: 20),
                       _emailWidget(),
                       SizedBox(height: 20),
                       _submitButton(),
-                     
+                      _createAccountLabel(),
+
                     ],
                   ),
-
                 ),
               ),
 
