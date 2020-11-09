@@ -8,6 +8,8 @@ import 'customClipper.dart';
 class BezierContainer extends StatelessWidget {
   const BezierContainer({Key key}) : super(key: key);
 
+
+
   Widget DesignTextFild(String title,TextEditingController control,String Error,bool ErrorVa, {bool isPassword = false}) {
     FocusNode myFocusNode = new FocusNode();
     return
